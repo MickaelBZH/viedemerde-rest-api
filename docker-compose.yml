@@ -1,0 +1,26 @@
+version: '2'
+services:
+  scraper:
+    build:
+      context: .
+      dockerfile: ./docker/scraper/Dockerfile
+    container_name: scraper
+    tty: true
+    links:
+      - mongodb
+  restapi:
+    build:
+      context: .
+      dockerfile: ./docker/play/Dockerfile
+    container_name: play
+    tty: true
+    ports:
+      - 9000:9000
+    links:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
